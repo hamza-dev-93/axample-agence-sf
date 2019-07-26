@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Title:
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="jambotron">
+        <div class="container mt-4 ml-5">
+
+
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4">
+                    <h1>{{ property.title }}
+                    </h1>
+                    <h2>
+                        {{ property.rooms }}
+                        pieces -
+                        {{ property.surface }}
+                    </h2>
+                    <div class="text-primary">
+                        <h3>
+                            {{ property.formattedPrice }}
+                            €
+                        </h3>
+                    </div>
+                    <a class="btn btn-primary" href="#" type="button">Contacter l'agence</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="col-3">
+            <p>
+                {{ property.description | nl2br }}
+
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">Rooms:
+                {{ property.rooms }}</div>
+
+            <div class="col-md-3">Floor:
+                {{ property.floor }}</div>
+            <div class="col-md-3">Type de chauffage:
+                {{ property.typeHeat }}</div>
+
+
+        </div>
+
+
+    </div>
+
+{% endblock %}
