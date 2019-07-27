@@ -9,35 +9,36 @@
     <div class="container">
         <h1>Agence
         </h1>
-        <div class="container">
-            <h2>Les derniers biens</h2>
-            <div class="row flex">
-                {% for property in properties %}
-                    <div class="col-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="{{ path('property_show', {'id': property.id, 'slug': property.slug}) }} ">
+    </div>
 
-                                        {{ property.title }}
-                                    </a>
-                                </h5>
+    <div class="container">
+        <h2>Les derniers biens</h2>
+        <div class="row mb-4">
+            {% for property in properties %}
 
-                                <p class="cart-text">
-                                    {{ property.city }}
-                                    {{ property.postalCode }}
-                                </p>
-                                <div class="text-primary text-lg">{{ property.formattedPrice }}
-                                    €
-                                </div>
-
-
-                            </div>
+                <div class="col-md-4">
+                    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary">
+                                {{ property.city }}
+                                - Code postal:
+                                {{ property.postalCode }}
+                            </strong>
+                            <h3 class="mb-0">
+                                {{ property.title }}</h3>
+                            <div class="mb-1 text-muted">
+                                {{ property.createdAt | date('d/m/Y') }}</div>
+                            <p class="card-text mb-auto">
+                                {{ property.description | slice(0, 255) ~ '...' }}
+                            </p>
+                            <a class="stretched-link" href="{{ path('property_show', {'id': property.id, 'slug': property.slug}) }}">Continue reading</a>
                         </div>
-                    </div>
 
+
+                    </div>
                 </div>
             {% endfor %}
         </div>
+
     </div>
-</div>{% endblock %}
+{% endblock %}
