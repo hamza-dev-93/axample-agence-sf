@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Property
 {
     const HEAT = [
+        0 => 'Choix type energie',
         1 => 'Electrique',
         2 => 'Gaz',
     ];
@@ -34,6 +36,12 @@ class Property
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(
+     *      min = 10,
+     *      max = 500,
+     *      minMessage = "y a pas de bien moin de {{ limit }} m ",
+     *      maxMessage = "le max de m carre {{ limit }} "
+     * )
      */
     private $surface;
 
@@ -73,7 +81,11 @@ class Property
     private $address;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Regex(
+     * pattern = "/^[0-9]{5}$/",
+     * message="Le code postale doit etre numerique composé de 5 chiffres"
+     * )
+     * @ORM\Column(type="string", length=255)     
      */
     private $postal_code;
 
@@ -96,11 +108,11 @@ class Property
     /**
      * getId.
      *
-     * @author	Hamza
-     * @since	v0.0.1
-     * @version	v1.0.0	Friday, July 26th, 2019.
-     * @access	public
-     * @return	int
+     * @author    Hamza
+     * @since    v0.0.1
+     * @version    v1.0.0    Friday, July 26th, 2019.
+     * @access    public
+     * @return    int
      */
     public function getId(): ?int
     {
@@ -110,27 +122,26 @@ class Property
     /**
      * getTitle.
      *
-     * @author	Hamza
-     * @since	v0.0.1
-     * @version	v1.0.0	Friday, July 26th, 2019.
-     * @access	public
-     * @return	string
+     * @author    Hamza
+     * @since    v0.0.1
+     * @version    v1.0.0    Friday, July 26th, 2019.
+     * @access    public
+     * @return    string
      */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-
     /**
      * setTitle.
      *
-     * @author	Hamza
-     * @since	v0.0.1
-     * @version	v1.0.0	Friday, July 26th, 2019.
-     * @access	public
-     * @param	string	$title	
-     * 
+     * @author    Hamza
+     * @since    v0.0.1
+     * @version    v1.0.0    Friday, July 26th, 2019.
+     * @access    public
+     * @param    string    $title
+     *
      */
     public function setTitle(string $title): self
     {
@@ -262,37 +273,39 @@ class Property
     /**
      * getTypeHeat.
      *
-     * @author	Unknown
-     * @since	v0.0.1
-     * @version	v1.0.0	Friday, July 26th, 2019.
-     * @access	public
-     * @return	string
+     * @author    Unknown
+     * @author    Hamza
+     * @since    v0.0.1
+     * @version    v1.0.0    Friday, July 26th, 2019.
+     * @version    v1.0.1    Friday, July 26th, 2019.
+     * @access    static
+     *
      */
     public function getTypeHeat(): ?string
     {
-        return self::HEAT[$this->heat];
+        return self::HEAT[$this->getHeat()];
     }
 
     /**
      * setHeat.
      *
-     * @author	Hamza
-     * @since	v0.0.1
-     * @version	v1.0.0	Friday, July 26th, 2019.	
-     * @version	v1.0.1	Friday, July 26th, 2019.	
-     * @version	v1.0.2	Friday, July 26th, 2019.	
-     * @version	v1.0.3	Friday, July 26th, 2019.	
-     * @version	v1.0.4	Friday, July 26th, 2019.	
-     * @version	v1.0.5	Friday, July 26th, 2019.	
-     * @version	v1.0.6	Friday, July 26th, 2019.	
-     * @access	public
-     * @param	int	$heat	
-     * @return	mixed
+     * @author    Hamza
+     * @since    v0.0.1
+     * @version    v1.0.0    Friday, July 26th, 2019.
+     * @version    v1.0.1    Friday, July 26th, 2019.
+     * @version    v1.0.2    Friday, July 26th, 2019.
+     * @version    v1.0.3    Friday, July 26th, 2019.
+     * @version    v1.0.4    Friday, July 26th, 2019.
+     * @version    v1.0.5    Friday, July 26th, 2019.
+     * @version    v1.0.6    Friday, July 26th, 2019.
+     * @access    public
+     * @param    int    $heat
+     * @return    mixed
      */
     public function setHeat(int $heat): self
     {
         /**
-         * @var		mixed	$this->heat
+         * @var        mixed    $this->heat
          */
         $this->heat = $heat;
 

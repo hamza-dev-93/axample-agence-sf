@@ -28,6 +28,14 @@
                             <a class="nav-link " href="{{ path('property_index') }} ">Acheter</a>
                         </li>
 
+                        <li class="nav-item {% if current_menu is defined and current_menu == 'Admin' %} active {% endif %} ">
+
+
+                            <a class="nav-link " href="{{ path('admin_property_index') }} ">Administrator</a>
+
+                        </li>
+
+
                     </div>
                 </body>
             </html>

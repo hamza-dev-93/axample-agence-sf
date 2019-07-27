@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}
+    Agence
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-4 ml-5">
+        <h1>Ajouter  un bien</h1>
+        {{ include ('admin/property/_form.html.twig', {form: formproperty, button: 'Enregistrer un bien' }) }}
+
+
+    </div>
+{% endblock %}
