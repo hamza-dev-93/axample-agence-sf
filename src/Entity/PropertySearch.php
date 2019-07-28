@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class PropertySearch
 {
 
@@ -20,8 +22,16 @@ class PropertySearch
 
     private $minSurface;
 
+    /**
+     *
+     *
+     * @var ArrayCollection
+     */
+    private $infoOptions;
+
     public function __construct()
     {
+        $this->infoOptions = new ArrayCollection();
     }
 
     public function getMaxPrice(): ?int
@@ -48,4 +58,28 @@ class PropertySearch
         return $this;
     }
 
+
+    /**
+     * Get the value of infoOptions
+     *
+     * @return  ArrayCollection
+     */ 
+    public function getInfoOptions()
+    {
+        return $this->infoOptions;
+    }
+
+    /**
+     * Set the value of infoOptions
+     *
+     * @param  ArrayCollection  $infoOptions
+     *
+     * @return  self
+     */ 
+    public function setInfoOptions(ArrayCollection $infoOptions)
+    {
+        $this->infoOptions = $infoOptions;
+
+        return $this;
+    }
 }

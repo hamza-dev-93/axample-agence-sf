@@ -2,11 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\InfoOption;
 use App\Entity\PropertySearch;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class PropertySearchType extends AbstractType
 {
@@ -27,6 +29,14 @@ class PropertySearchType extends AbstractType
                     'placeholder' => 'Budget maximale',
                 ],
             ])
+            ->add('infoOptions', EntityType::class, [
+                'required' => false,
+                'label' => false,
+                'class' => InfoOption::class,
+                'choice_label' => 'name',
+                'multiple' => true
+
+            ])
             // ->add('submit', SubmitType::class, [
             //     'label' => ' Rechercher ',
             //     'attr' => [
@@ -41,7 +51,7 @@ class PropertySearchType extends AbstractType
         $resolver->setDefaults([
             'data_class' => PropertySearch::class,
             'method' => 'get',
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ]);
     }
 

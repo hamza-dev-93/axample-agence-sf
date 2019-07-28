@@ -6,12 +6,13 @@
 {% endblock %}
 
 {% block body %}
-    <div class="jumbotron jumbotron-fluide" style="height: 100px;">
+    <div class="jumbotron jumbotron-fluide">
         <div class="container">
             {{form_start(formSearch)}}
             <div class="form-row">
                 <div class="col">{{ form_row(formSearch.minSurface) }}</div>
                 <div class="col">{{ form_row(formSearch.maxPrice) }}</div>
+                <div class="col">{{ form_row(formSearch.infoOptions) }}</div>
                 <div class="col">
                     <button class="btn btn-primary">Rechercher ...</button>
                 </div>

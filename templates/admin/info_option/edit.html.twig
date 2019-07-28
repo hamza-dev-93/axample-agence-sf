@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit InfoOption
+{% endblock %}
+
+{% block body %}
+    <h1>Edit InfoOption</h1>
+
+    {{ include('admin/info_option/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    <a href="{{ path('info_option_index') }}">back to list</a>
+
+    {{ include('admin/info_option/_delete_form.html.twig') }}
+
+{% endblock %}

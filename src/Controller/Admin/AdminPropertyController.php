@@ -2,16 +2,17 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Option;
 use App\Entity\Property;
+use App\Form\PropertyType;
 use App\Entity\PropertySearch;
 use App\Form\PropertySearchType;
-use App\Form\PropertyType;
 use App\Repository\PropertyRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminPropertyController extends AbstractController
 {
@@ -112,15 +113,20 @@ class AdminPropertyController extends AbstractController
      * @param    property         $repo
      * @param    request          $req
      * @param    objectmanager    $manager
-     * @return    mixed
+     * 
      */
     public function edit(Property $repo, Request $req)
     {
+
+        // $option = new Option();
+        // $repo->addOption();
+
         $formProperty = $this->createForm(PropertyType::class, $repo);
 
         $formProperty->handleRequest($req);
         if ($formProperty->isSubmitted() && $formProperty->isValid()) {
             // $this->manager->persist($formProperty);
+            
             $this->manager->flush();
             $this->addFlash('success', 'Le bien a été bien modifié avec succés !');
             return $this->redirectToRoute('admin_property_index');

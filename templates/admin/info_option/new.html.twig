@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New InfoOption
+{% endblock %}
+
+{% block body %}
+    <h1>Create new InfoOption</h1>
+
+    {{ include('admin/info_option/_form.html.twig') }}
+
+    <a href="{{ path('info_option_index') }}">back to list</a>
+{% endblock %}

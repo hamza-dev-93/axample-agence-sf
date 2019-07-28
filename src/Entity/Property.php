@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Cocur\Slugify\Slugify;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -99,50 +101,37 @@ class Property
      */
     private $createdAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Option", mappedBy="properties")
+     */
+    private $options;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\InfoOption", inversedBy="property")
+     */
+    private $infoOptions;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->options = new ArrayCollection();
+        $this->infoOptions = new ArrayCollection();
 
     }
 
-    /**
-     * getId.
-     *
-     * @author    Hamza
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @access    public
-     * @return    int
-     */
+    
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * getTitle.
-     *
-     * @author    Hamza
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @access    public
-     * @return    string
-     */
+    
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * setTitle.
-     *
-     * @author    Hamza
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @access    public
-     * @param    string    $title
-     *
-     */
+    
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -150,16 +139,7 @@ class Property
         return $this;
     }
 
-    /**
-     * getSlug.
-     *
-     * @author    Unknown
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @access    public
-     * @param    string    $title
-     * @return    string
-     */
+    
     public function getSlug(): string
     {
         $slugify = new Slugify();
@@ -219,13 +199,7 @@ class Property
         return $this->floor;
     }
 
-    /**
-     * setFloor
-     *
-     * @param  mixed $floor
-     *
-     * @return self
-     */
+    
     public function setFloor(int $floor): self
     {
         $this->floor = $floor;
@@ -233,16 +207,7 @@ class Property
         return $this;
     }
 
-    /**
-     * getPrice.
-     *
-     * @author    Unknown
-     * @since    v0.0.1
-     * @version    v1.0.0    Thursday, July 25th, 2019.
-     * @access    public
-     * @return    int
-     *
-     */
+    
     public function getPrice(): ?int
     {
         return $this->price;
@@ -270,38 +235,13 @@ class Property
         return $this->heat;
     }
 
-    /**
-     * getTypeHeat.
-     *
-     * @author    Unknown
-     * @author    Hamza
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @version    v1.0.1    Friday, July 26th, 2019.
-     * @access    static
-     *
-     */
+    
     public function getTypeHeat(): ?string
     {
         return self::HEAT[$this->getHeat()];
     }
 
-    /**
-     * setHeat.
-     *
-     * @author    Hamza
-     * @since    v0.0.1
-     * @version    v1.0.0    Friday, July 26th, 2019.
-     * @version    v1.0.1    Friday, July 26th, 2019.
-     * @version    v1.0.2    Friday, July 26th, 2019.
-     * @version    v1.0.3    Friday, July 26th, 2019.
-     * @version    v1.0.4    Friday, July 26th, 2019.
-     * @version    v1.0.5    Friday, July 26th, 2019.
-     * @version    v1.0.6    Friday, July 26th, 2019.
-     * @access    public
-     * @param    int    $heat
-     * @return    mixed
-     */
+    
     public function setHeat(int $heat): self
     {
         /**
@@ -373,6 +313,62 @@ class Property
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Option[]
+     */
+    public function getOptions(): Collection
+    {
+        return $this->options;
+    }
+
+    public function addOption(Option $option): self
+    {
+        if (!$this->options->contains($option)) {
+            $this->options[] = $option;
+            $option->addProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        if ($this->options->contains($option)) {
+            $this->options->removeElement($option);
+            $option->removeProperty($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|InfoOption[]
+     */
+    public function getInfoOptions(): Collection
+    {
+        return $this->infoOptions;
+    }
+
+    public function addInfoOption(InfoOption $infoOption): self
+    {
+        if (!$this->infoOptions->contains($infoOption)) {
+            $this->infoOptions[] = $infoOption;
+            $infoOption->addProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInfoOption(InfoOption $infoOption): self
+    {
+        if ($this->infoOptions->contains($infoOption)) {
+            $this->infoOptions->removeElement($infoOption);
+            $infoOption->removeProperty($this);
+        }
 
         return $this;
     }
