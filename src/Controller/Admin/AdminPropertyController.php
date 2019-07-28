@@ -3,9 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
+use App\Form\PropertySearchType;
 use App\Form\PropertyType;
 use App\Repository\PropertyRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,24 +29,41 @@ class AdminPropertyController extends AbstractController
      * @version    v1.0.0    Friday, July 26th, 2019.
      * @access    public
      * @param    propertyrepository    $repo
-     * @return    array
+     *
      */
     public function __construct(PropertyRepository $repo, ObjectManager $manager)
     {
         $this->repo = $repo;
         $this->manager = $manager;
     }
+
     /**
      * @Route("/admin", name="admin_property_index")
      *
      *
      */
-    public function index()
+    public function index(PaginatorInterface $paginator, Request $request)
     {
-        $properties = $this->repo->findAll();
+        //code qui config la formSearch pour filtrer data
+        $search = new PropertySearch();
+        $formSearch = $this->createForm(PropertySearchType::class, $search);
+        $formSearch->handleRequest($request);
+
+        //code qui recupere data de database table Property avec config pagination
+        if ($search) {
+            $query = $this->repo->findAllVisibleQuery($search);
+        } else {
+            # code...
+            $query = $this->repo->findAllVisibleQuery();
+        }
+        $req = $request->query->getInt('page', 1);
+        $properties = $paginator->paginate($query, $req, 6);
+
+        // $properties = $this->repo->findAll();
         return $this->render('admin/property/index.html.twig', [
             'current_menu' => 'Admin',
             'properties' => $properties,
+            'formSearch' => $formSearch->createView(),
 
         ]);
     }

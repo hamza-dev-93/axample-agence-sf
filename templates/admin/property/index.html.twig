@@ -14,16 +14,40 @@
                 {{ message }}
             </div>
         {% endfor %}
+        <div class="jumbotron jumbotron-fluide" style="height: 100px;">
+            <div class="container">
+                {{form_start(formSearch)}}
+                <div class="form-row">
+                    <div class="col">{{ form_row(formSearch.minSurface) }}</div>
+                    <div class="col">{{ form_row(formSearch.maxPrice) }}</div>
+                    <div class="col">
+                        <button class="btn btn-primary">Rechercher ...</button>
+                    </div>
+                </div>
 
+                {{form_end(formSearch)}}
+            </div>
+        </div>
+
+        {# total items count #}
+        <div class="count">
+            Total:
+            {{ properties.getTotalItemCount }}
+            Biens
+
+        </div>
 
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Titre
-                    </th>
-                    <th>Action
-                    </th>
+                    <th>{{ knp_pagination_sortable(properties, 'Titre', 'p.title') }}</th>
+                    <th>{{ knp_pagination_sortable(properties, 'Price', 'p.price') }}</th>
+                    <th>{{ knp_pagination_sortable(properties, 'Surface', 'p.surface') }}</th>
+                    <th>{{ knp_pagination_sortable(properties, 'Rooms', 'p.rooms') }}</th>
+                    <th>{{ knp_pagination_sortable(properties, 'Bedrooms', 'p.bedrooms') }}</th>
+                    <th>{{ knp_pagination_sortable(properties, 'City', 'p.city') }}</th>
 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,6 +55,12 @@
 
                     <tr>
                         <td>{{ property.title }}</td>
+                        <td>{{ property.formattedPrice }}</td>
+                        <td>{{ property.surface }}</td>
+                        <td>{{ property.rooms }}</td>
+                        <td>{{ property.bedrooms }}</td>
+                        <td>{{ property.city }}</td>
+
                         <td>
                             <a href="{{ path('admin_property_edit', {id: property.id }) }} " class="btn btn-secondary">Editer Property</a>
                             <form method="POST" action="{{ path('admin_property_delete', {id: property.id} ) }} " style="display: inLine-block" onsubmit="return confirm('ete vous sur de supprimer ce bien ?');">
@@ -47,6 +77,10 @@
             </tbody>
         </tbody>
     </table>
+    {# display navigation #}
+    <div class="navigation">
+        {{ knp_pagination_render(properties) }}
+    </div>
 
     <div class="text-right">
         <a href="{{path('admin_property_new') }} " class="btn btn-primary">Créer nouveau bien

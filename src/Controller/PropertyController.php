@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
+use App\Form\PropertySearchType;
 use App\Repository\PropertyRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -27,11 +31,37 @@ class PropertyController extends AbstractController
 
     /**
      * @Route("/biens", name="property_index")
+     *
+     *
      */
-    public function index(ObjectManager $manager, PropertyRepository $repo): Response
+    public function index(PaginatorInterface $paginator, Request $request)
+    {
+        //code qui config la formSearch pour filtrer data
+        $search = new PropertySearch();
+        $formSearch = $this->createForm(PropertySearchType::class, $search);
+        $formSearch->handleRequest($request);
+
+        if ($search) {
+            $query = $this->repo->findAllVisibleQuery($search);
+        } else {
+            # code...
+            $query = $this->repo->findAllVisibleQuery();
+        }
+        $req = $request->query->getInt('page', 1);
+        $properties = $paginator->paginate($query, $req, 6);
+
+        // $properties = $this->repo->findAll();
+        return $this->render('property/index.html.twig', [
+            'current_menu' => 'Admin',
+            'properties' => $properties,
+            'formSearch' => $formSearch->createView(),
+
+        ]);
+    }
+
+    public function indexold(ObjectManager $manager, PropertyRepository $repo): Response
     {
         $repo->findAllVisible();
-        dump($this->repo);
 
         // initiation de table property avec des donnes de title: premier bien
         // $property = new Property();
