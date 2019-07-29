@@ -1,25 +1,55 @@
 {% extends 'base.html.twig' %}
-
-
 {% block title %}
-    Title:
-
+    Bien
 {% endblock %}
 
-
 {% block body %}
-    <div class="jambotron mt-4 ml-4">
-        {% include 'property/_property.html.twig' %}
+    <div
+        class="jambotron mt-4 ml-4">
+        {# {% include 'property/_property.html.twig' %} #}
 
-    </div>
-    <div class="ml-5">
-        <p>
-            <a href="{{ path('admin_property_edit', {id: property.id}) }} " class="btn btn-primary">
+        <div class="container row" style="width: 42rem;">
 
-                Editer ce bien
-            </a>
-        </p>
+            <div class="card">
+                {% if property.imageName %}
+                    <img alt="..." class="card-img-top" src="/images/properties/{{ property.imageName }} ">
+
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ property.title }}</h5>
+
+                    <h6 class="card-subtitle mb-2 text-muted">{{ property.formattedPrice }}
+                        €  -
+                        {{ property.surface }}
+                        m²</h6>
+
+                    <p class="card-text">
+                        {{ property.description }}
+                    </p>
+
+                    <a class="card-link" href="#">
+                        {{ property.city }}
+                    </a>
+                    -
+                    <a class="card-link" href="#">- Code postal:
+                        {{ property.postalCode }}</a>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="ml-5">
+                <p>
+                    <a href="{{ path('admin_property_edit', {id: property.id}) }} " class="btn btn-primary">
+
+                        Editer ce bien
+                    </a>
+                </p>
+            </div>
+        </div>
     </div>
-    <div class="footer"></div>
+
 
 {% endblock %}

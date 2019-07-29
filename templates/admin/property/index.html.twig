@@ -46,8 +46,10 @@
                     <th>{{ knp_pagination_sortable(properties, 'Rooms', 'p.rooms') }}</th>
                     <th>{{ knp_pagination_sortable(properties, 'Bedrooms', 'p.bedrooms') }}</th>
                     <th>{{ knp_pagination_sortable(properties, 'City', 'p.city') }}</th>
+                    <th>Photo</th>
+                    <th>Editer</th>
+                    <th>Delete</th>
 
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,16 +62,23 @@
                         <td>{{ property.rooms }}</td>
                         <td>{{ property.bedrooms }}</td>
                         <td>{{ property.city }}</td>
+                        <td>
+                            <img alt="..." class="card-img-top" src="{{ vich_uploader_asset(property, 'imageFile') | imagine_filter('my_thumb') }}" style="width: 100px;"></td>
+
 
                         <td>
-                            <a href="{{ path('admin_property_edit', {id: property.id }) }} " class="btn btn-secondary">Editer Property</a>
+                            <a href="{{ path('admin_property_edit', {id: property.id }) }} " class="btn btn-secondary">Editer</a>
+
+                        </td>
+                        <td>
                             <form method="POST" action="{{ path('admin_property_delete', {id: property.id} ) }} " style="display: inLine-block" onsubmit="return confirm('ete vous sur de supprimer ce bien ?');">
                                 <input name="_method" type="hidden" value="DELETE">
                                 <input name="_token" type="hidden" value="{{ csrf_token('delete' ~ property.id) }} ">
 
-                                <button class="btn btn-danger" type="submit">Supprimer le bien</button>
+                                <button class="btn btn-danger" type="submit">Supprimer</button>
                             </form>
                         </td>
+
 
                     </tr>
 

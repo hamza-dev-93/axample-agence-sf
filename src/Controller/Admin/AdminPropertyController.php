@@ -2,7 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Option;
 use App\Entity\Property;
 use App\Form\PropertyType;
 use App\Entity\PropertySearch;
@@ -12,6 +11,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminPropertyController extends AbstractController
@@ -113,9 +115,9 @@ class AdminPropertyController extends AbstractController
      * @param    property         $repo
      * @param    request          $req
      * @param    objectmanager    $manager
-     * 
+     *
      */
-    public function edit(Property $repo, Request $req)
+    public function edit(Property $repo, Request $req, CacheManager $cachManager, UploaderHelper $helper)
     {
 
         // $option = new Option();
@@ -125,8 +127,14 @@ class AdminPropertyController extends AbstractController
 
         $formProperty->handleRequest($req);
         if ($formProperty->isSubmitted() && $formProperty->isValid()) {
+
+            if ($repo->getImageFile() instanceof UploadedFile) {
+                $cachManager->remove($helper->asset($repo, 'imageFile'));
+
+            }
+
             // $this->manager->persist($formProperty);
-            
+
             $this->manager->flush();
             $this->addFlash('success', 'Le bien a été bien modifié avec succés !');
             return $this->redirectToRoute('admin_property_index');

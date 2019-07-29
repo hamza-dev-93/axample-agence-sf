@@ -9,9 +9,10 @@
     <div class="col-md-2">{{ form_row(formproperty.rooms) }}</div>
     <div class="col-md-2">{{ form_row(formproperty.bedrooms) }}</div>
     <div class="col-md-2">{{ form_row(formproperty.heat) }}</div>
-
-    <div class="col-md-2">{{ form_row(formproperty.floor) }}</div>
-
+    <div class="col-md-3">{{ form_row(formproperty.imageFile) }}</div>
+    <div class="col-3">
+        <img alt="..." class="card-img-top" src="{{ vich_uploader_asset(property, 'imageFile') }}" style="width: 200px;">
+    </div>
 </div>
 <div class="row">
     <div class="col-md-5">{{ form_row(formproperty.address) }}</div>
@@ -19,11 +20,12 @@
     <div class="col-md-2">{{ form_row(formproperty.postal_code) }}</div>
     <div class="col-md-2">{{ form_row(formproperty.sold) }}</div>
 
+
+    {{form_rest(formproperty)  }}
+
+
+    <button class="btn btn-primary" type="submit">{{ button | default('Enregistrer un bien') }}
+    </button>
 </div>
-{{form_rest(formproperty)  }}
-
-
-<button class="btn btn-primary" type="submit">{{ button | default('Enregistrer un bien') }}
-</button>
 
 {{ form_end(formproperty) }}

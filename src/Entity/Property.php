@@ -6,10 +6,14 @@ use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+// use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PropertyRepository")
+ * @Vich\Uploadable()
  */
 class Property
 {
@@ -25,6 +29,29 @@ class Property
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="property_image", fileNameProperty="imageName")
+     *
+     * @var File|null
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string|null
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -87,7 +114,7 @@ class Property
      * pattern = "/^[0-9]{5}$/",
      * message="Le code postale doit etre numerique composé de 5 chiffres"
      * )
-     * @ORM\Column(type="string", length=255)     
+     * @ORM\Column(type="string", length=255)
      */
     private $postal_code;
 
@@ -119,19 +146,52 @@ class Property
 
     }
 
-    
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    
+    /**
+ * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+ * of 'UploadedFile' is injected into this setter to trigger the update. If this
+ * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+ * must be able to accept an instance of 'File' as the bundle will inject one here
+ * during Doctrine hydration.
+ * 
+ * 
+ */
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -139,7 +199,6 @@ class Property
         return $this;
     }
 
-    
     public function getSlug(): string
     {
         $slugify = new Slugify();
@@ -199,7 +258,6 @@ class Property
         return $this->floor;
     }
 
-    
     public function setFloor(int $floor): self
     {
         $this->floor = $floor;
@@ -207,7 +265,6 @@ class Property
         return $this;
     }
 
-    
     public function getPrice(): ?int
     {
         return $this->price;
@@ -235,13 +292,11 @@ class Property
         return $this->heat;
     }
 
-    
     public function getTypeHeat(): ?string
     {
         return self::HEAT[$this->getHeat()];
     }
 
-    
     public function setHeat(int $heat): self
     {
         /**

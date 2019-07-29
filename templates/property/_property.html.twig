@@ -2,21 +2,26 @@
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">
-                {{ property.city }}
+                {{ property.city }}<br>
                 - Code postal:
                 {{ property.postalCode }}
             </strong>
+            {% if property.imageName %}
+                <div class="mb-1">
+                    <img alt="..." class="card-img-top" src="{{ vich_uploader_asset(property, 'imageFile') | imagine_filter('my_thumb') }} ">
+                </div>
+            {% endif %}
             <h3 class="mb-0">{{ property.title }}</h3>
             <div class="mb-1 text-muted">{{ property.createdAt | date('d/m/Y') }}</div>
-            <div class="mb-1 text-muted">{{ property.surface }}
-                m²</div>
-            <p class="card-text mb-auto">
-                {{ property.description}}
-            </p>
-            <a class="stretched-link" href="{{ path('property_show', {'id': property.id, 'slug': property.slug}) }}">{{ property.formattedPrice }}
-                €</a>
-        </div>
+            <div class="mb-1 text-muted">Surface:
+                {{ property.surface}}
+                m² - Prix:
+                {{ property.formattedPrice }}
+                €</div>
+            <p class="card-text mb-auto">{{ property.description |slice(0, 100) }}</p>
 
-
+        </p>
+        <a class="stretched-link" href="{{ path('property_show', {'id': property.id, 'slug': property.slug}) }}">{{ property.formattedPrice }}
+            €</a>
     </div>
-</div>
+</div></div>
