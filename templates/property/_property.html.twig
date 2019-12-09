@@ -1,3 +1,5 @@
+{# {% cache 'property' ~ property.id property.updatedAt.timestamp %} #}
+
 <div class="col-md-4">
     <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
@@ -24,4 +26,4 @@
         <a class="stretched-link" href="{{ path('property_show', {'id': property.id, 'slug': property.slug}) }}">{{ property.formattedPrice }}
             €</a>
     </div>
-</div></div>
+    {# </div></div>{% endcache %} #}

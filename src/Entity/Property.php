@@ -360,6 +360,19 @@ class Property
         return $this;
     }
 
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdateAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;

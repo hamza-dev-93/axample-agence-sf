@@ -135,7 +135,9 @@ class AdminPropertyController extends AbstractController
 
             // $this->manager->persist($formProperty);
 
+
             $this->manager->flush();
+            
             $this->addFlash('success', 'Le bien a été bien modifié avec succés !');
             return $this->redirectToRoute('admin_property_index');
         }
